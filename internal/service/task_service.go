@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -46,7 +47,7 @@ func (s *TaskService) Create(ctx context.Context, input TaskInput) (*model.Task,
 		return nil, err
 	}
 	if _, err := s.projects.GetProjectByID(ctx, input.ProjectID); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("project not found")
 	}
 
 	task := &model.Task{
