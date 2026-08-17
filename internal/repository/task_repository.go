@@ -134,7 +134,7 @@ func (r *SQLiteRepository) ListTasks(ctx context.Context, filter TaskFilter, pag
 	}
 
 	countQuery := "SELECT COUNT(*) FROM tasks" + where
-	queryArgs := appendPaginationArgs(args, limit, offset)
+	paginationArgs := appendPaginationArgs(args, limit, offset)
 	var total int
 	if err := r.db.QueryRowContext(ctx, countQuery, args...).Scan(&total); err != nil {
 		return nil, 0, err
@@ -142,7 +142,7 @@ func (r *SQLiteRepository) ListTasks(ctx context.Context, filter TaskFilter, pag
 
 	query := `SELECT id, project_id, title, priority, status, due_date, tags, created_at, updated_at
 		 FROM tasks` + where + ` ORDER BY id DESC LIMIT ? OFFSET ?`
-	rows, err := r.db.QueryContext(ctx, query, queryArgs...)
+	rows, err := r.db.QueryContext(ctx, query, paginationArgs...)
 	if err != nil {
 		return nil, 0, err
 	}
