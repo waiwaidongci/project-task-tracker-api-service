@@ -74,6 +74,7 @@ func (r *SQLiteRepository) DeleteProject(ctx context.Context, id int64) error {
 
 func (r *SQLiteRepository) ListProjects(ctx context.Context, page, pageSize int) ([]model.Project, int, error) {
 	limit, offset := buildPagination(page, pageSize)
+	args := appendPaginationArgs(nil, limit, offset)
 
 	var total int
 	if err := r.db.QueryRowContext(ctx, "SELECT COUNT(*) FROM projects").Scan(&total); err != nil {
@@ -85,8 +86,7 @@ func (r *SQLiteRepository) ListProjects(ctx context.Context, page, pageSize int)
 		 FROM projects
 		 ORDER BY id DESC
 		 LIMIT ? OFFSET ?`,
-		limit,
-		offset,
+		args...,
 	)
 	if err != nil {
 		return nil, 0, err

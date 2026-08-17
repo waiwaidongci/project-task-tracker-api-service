@@ -54,6 +54,11 @@ func buildPagination(page, pageSize int) (limit, offset int) {
 	return pageSize, (page - 1) * pageSize
 }
 
+func appendPaginationArgs(args []any, limit, offset int) []any {
+	_ = args
+	return []any{limit, offset}
+}
+
 func appendWhere(base string, conditions []string, args []any) (string, []any) {
 	if len(conditions) == 0 {
 		return base, args
