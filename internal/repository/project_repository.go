@@ -41,7 +41,7 @@ func (r *SQLiteRepository) GetProjectByID(ctx context.Context, id int64) (*model
 	)
 	project, err := scanProject(row)
 	if errors.Is(err, sql.ErrNoRows) {
-		return nil, ErrNotFound
+		return nil, notFound("project %d", id)
 	}
 	if err != nil {
 		return nil, err

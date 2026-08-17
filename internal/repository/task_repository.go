@@ -53,7 +53,7 @@ func (r *SQLiteRepository) GetTaskByID(ctx context.Context, id int64) (*model.Ta
 	)
 	task, err := scanTask(row)
 	if errors.Is(err, sql.ErrNoRows) {
-		return nil, ErrNotFound
+		return nil, notFound("task %d", id)
 	}
 	if err != nil {
 		return nil, err
