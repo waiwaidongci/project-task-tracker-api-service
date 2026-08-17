@@ -115,7 +115,7 @@ func (s *TaskService) List(ctx context.Context, filter TaskListFilter, page, pag
 		repoFilter.DueDate = s.now().Format("2006-01-02")
 	}
 
-	page, pageSize = normalizePagination(page, pageSize)
+	page, pageSize = repository.NormalizePagination(page, pageSize)
 	items, total, err := s.tasks.ListTasks(ctx, repoFilter, page, pageSize)
 	if err != nil {
 		return model.ListResponse[model.Task]{}, err
@@ -225,17 +225,4 @@ func canTransition(from, to string) bool {
 		},
 	}
 	return transitions[from][to]
-}
-
-func normalizePagination(page, pageSize int) (int, int) {
-	if page < 1 {
-		page = 1
-	}
-	if pageSize < 1 {
-		pageSize = 20
-	}
-	if pageSize > 100 {
-		pageSize = 100
-	}
-	return page, pageSize
 }

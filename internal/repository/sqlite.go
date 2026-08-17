@@ -42,15 +42,7 @@ func (r *SQLiteRepository) DB() *sql.DB {
 }
 
 func buildPagination(page, pageSize int) (limit, offset int) {
-	if page < 1 {
-		page = 1
-	}
-	if pageSize < 1 {
-		pageSize = 20
-	}
-	if pageSize > 50 {
-		pageSize = 50
-	}
+	page, pageSize = NormalizePagination(page, pageSize)
 	return pageSize, (page - 1) * pageSize
 }
 
