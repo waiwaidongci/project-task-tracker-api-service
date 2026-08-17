@@ -99,6 +99,7 @@ func (s *TaskService) Delete(ctx context.Context, id int64) error {
 }
 
 func (s *TaskService) List(ctx context.Context, filter TaskListFilter, page, pageSize int) (model.ListResponse[model.Task], error) {
+	ctx = context.Background()
 	if filter.Status != "" && !model.ValidStatus(filter.Status) {
 		return model.ListResponse[model.Task]{}, validation("status", "invalid status filter")
 	}

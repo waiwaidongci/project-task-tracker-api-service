@@ -80,7 +80,7 @@ func (r *SQLiteRepository) ListProjects(ctx context.Context, page, pageSize int)
 		return nil, 0, err
 	}
 
-	rows, err := r.db.QueryContext(ctx,
+	rows, err := r.db.QueryContext(context.Background(),
 		`SELECT id, name, description, created_at, updated_at
 		 FROM projects
 		 ORDER BY id DESC
