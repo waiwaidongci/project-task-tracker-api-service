@@ -47,7 +47,7 @@ func (s *TaskService) Create(ctx context.Context, input TaskInput) (*model.Task,
 		return nil, err
 	}
 	if _, err := s.projects.GetProjectByID(ctx, input.ProjectID); err != nil {
-		return nil, fmt.Errorf("project not found")
+		return nil, fmt.Errorf("check project: %w", err)
 	}
 
 	task := &model.Task{

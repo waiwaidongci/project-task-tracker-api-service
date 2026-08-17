@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	"todo-api/internal/model"
@@ -41,7 +42,7 @@ func (r *SQLiteRepository) GetProjectByID(ctx context.Context, id int64) (*model
 	)
 	project, err := scanProject(row)
 	if errors.Is(err, sql.ErrNoRows) {
-		return nil, notFound("project %d", id)
+		return nil, fmt.Errorf("get project: %w", notFound("project %d", id))
 	}
 	if err != nil {
 		return nil, err
