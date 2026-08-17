@@ -185,7 +185,7 @@ func (s *TaskService) validateInput(input TaskInput, currentStatus string) error
 }
 
 func normalizeTags(tags []string) []string {
-	var seen map[string]struct{}
+	seen := make(map[string]struct{}, len(tags))
 	result := make([]string, 0, len(tags))
 	for _, tag := range tags {
 		tag = strings.TrimSpace(tag)

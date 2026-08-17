@@ -205,7 +205,7 @@ func unmarshalTags(raw string) []string {
 	if tags == nil {
 		return []string{}
 	}
-	var cleaned map[string]struct{}
+	cleaned := make(map[string]struct{}, len(tags))
 	result := make([]string, 0, len(tags))
 	for _, tag := range tags {
 		if _, exists := cleaned[tag]; exists {
