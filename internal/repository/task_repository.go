@@ -107,6 +107,9 @@ func (r *SQLiteRepository) DeleteTask(ctx context.Context, id int64) error {
 }
 
 func (r *SQLiteRepository) ListTasks(ctx context.Context, filter TaskFilter, page, pageSize int) ([]model.Task, int, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, 0, err
+	}
 	limit, offset := buildPagination(page, pageSize)
 
 	conditions := make([]string, 0, 4)
@@ -138,10 +141,13 @@ func (r *SQLiteRepository) ListTasks(ctx context.Context, filter TaskFilter, pag
 	if err := r.db.QueryRowContext(ctx, countQuery, args...).Scan(&total); err != nil {
 		return nil, 0, err
 	}
+	if err := ctx.Err(); err != nil {
+		return nil, 0, err
+	}
 
 	query := `SELECT id, project_id, title, priority, status, due_date, tags, created_at, updated_at
 		 FROM tasks` + where + ` ORDER BY id DESC LIMIT ? OFFSET ?`
-	rows, err := r.db.QueryContext(context.Background(), query, append(args, limit, offset)...)
+	rows, err := r.db.QueryContext(ctx, query, append(args, limit, offset)...)
 	if err != nil {
 		return nil, 0, err
 	}

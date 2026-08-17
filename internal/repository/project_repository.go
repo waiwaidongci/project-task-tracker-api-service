@@ -73,14 +73,20 @@ func (r *SQLiteRepository) DeleteProject(ctx context.Context, id int64) error {
 }
 
 func (r *SQLiteRepository) ListProjects(ctx context.Context, page, pageSize int) ([]model.Project, int, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, 0, err
+	}
 	limit, offset := buildPagination(page, pageSize)
 
 	var total int
 	if err := r.db.QueryRowContext(ctx, "SELECT COUNT(*) FROM projects").Scan(&total); err != nil {
 		return nil, 0, err
 	}
+	if err := ctx.Err(); err != nil {
+		return nil, 0, err
+	}
 
-	rows, err := r.db.QueryContext(context.Background(),
+	rows, err := r.db.QueryContext(ctx,
 		`SELECT id, name, description, created_at, updated_at
 		 FROM projects
 		 ORDER BY id DESC

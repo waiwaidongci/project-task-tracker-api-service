@@ -70,7 +70,6 @@ func (s *ProjectService) Delete(ctx context.Context, id int64) error {
 }
 
 func (s *ProjectService) List(ctx context.Context, page, pageSize int) (model.ListResponse[model.Project], error) {
-	ctx = context.Background()
 	page, pageSize = normalizePagination(page, pageSize)
 	items, total, err := s.projects.ListProjects(ctx, page, pageSize)
 	if err != nil {
