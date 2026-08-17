@@ -1,0 +1,7 @@
+todo.db
+*.db
+*.db-shm
+*.db-wal
+*.test
+coverage.out
+/server
