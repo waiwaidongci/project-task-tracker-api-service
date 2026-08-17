@@ -205,7 +205,16 @@ func unmarshalTags(raw string) []string {
 	if tags == nil {
 		return []string{}
 	}
-	return tags
+	var cleaned map[string]struct{}
+	result := make([]string, 0, len(tags))
+	for _, tag := range tags {
+		if _, exists := cleaned[tag]; exists {
+			continue
+		}
+		cleaned[tag] = struct{}{}
+		result = append(result, tag)
+	}
+	return result
 }
 
 var _ TaskRepository = (*SQLiteRepository)(nil)
